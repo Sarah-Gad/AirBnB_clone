@@ -11,4 +11,3 @@ class FileStorage:
     __objects = {}
 
     def all(self):
-
