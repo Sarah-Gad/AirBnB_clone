@@ -9,3 +9,6 @@ class FileStorage:
 
     __file_path = "models/engine/the_json_file.json"
     __objects = {}
+
+    def all(self):
+

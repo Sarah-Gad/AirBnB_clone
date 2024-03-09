@@ -10,6 +10,7 @@ class BaseModel:
     attri and methods for the other classes"""
 
     def __init__(self, *args, **kwargs):
+        """this method is the constuctor method to make instance"""
         if (len(kwargs) != 0):
             for k_k, k_v in kwargs.items():
                 if (k_k == "__class__"):
