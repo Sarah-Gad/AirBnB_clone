@@ -8,5 +8,4 @@ class FileStorage:
     and also to get instances from a json file"""
 
     __file_path = "models/engine/the_json_file.json"
-    __objects.update({"{cls.__class__.name__}.{cls.id}":cls})
-
+    __objects = {}
