@@ -19,8 +19,8 @@ class FileStorage:
 
     def new(self, obj):
         """This method is used to set the __object"""
-        Thek = f"{obj.__class__.__name__}.{obj.id}"
-        FileStorage.__objects[Thek] = obj
+        thek = f"{obj.__class__.__name__}.{obj.id}"
+        FileStorage.__objects[thek] = obj
 
     def save(self):
         """This method will serialize the ___object"""
