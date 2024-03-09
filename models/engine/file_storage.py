@@ -19,7 +19,7 @@ class FileStorage:
 
     def new(self, obj):
         """This method is used to set the __object"""
-        thek = f"{obj.__class__.__name__}.{obj.id}"
+        thek = obj.__class__.__name__ + '.' + obj.id
         FileStorage.__objects[thek] = obj
 
     def save(self):
@@ -34,7 +34,7 @@ class FileStorage:
         """This method is used to desialize the json file
         that contains the serialized dict"""
         try:
-            with open(FileStorage.__file_path, "r", encoding="utf-8") as jjf:
+            with open(FileStorage.__file_path, encoding="utf-8") as jjf:
                 deser = json.load(jjf)
             for o_v in deser.values():
                 c_name = o_v["__class__"]
