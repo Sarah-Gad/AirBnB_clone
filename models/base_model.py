@@ -15,7 +15,8 @@ class BaseModel:
                 if (k_k == "__class__"):
                     continue
                 if (k_k == "created_at" or k_k == "updated_at"):
-                    setattr(self, k_k, datetime.strptime(k_v, "%Y-%m-%dT%H:%M:%S.%f"))
+                    setattr(self, k_k, datetime.strptime(
+                        k_v, "%Y-%m-%dT%H:%M:%S.%f"))
                 else:
                     setattr(self, k_k, k_v)
         else:
