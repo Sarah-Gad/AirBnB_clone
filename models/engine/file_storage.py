@@ -4,6 +4,7 @@ that I will usefor serialization and deserialization"""
 
 import json
 from models.base_model import BaseModel
+from os.path import exists
 
 
 class FileStorage:
