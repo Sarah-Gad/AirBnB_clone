@@ -5,6 +5,7 @@ import cmd
 from models.base_model import BaseModel
 from models import storage
 
+
 class HBNBCommand(cmd.Cmd):
     """This is a sub class of the cmd class
     that will make the cmdloop"""
@@ -83,6 +84,50 @@ class HBNBCommand(cmd.Cmd):
                 elif len(div_args) == 0:
                     returned_st.append(f_inst.__str__())
             print(returned_st)
+ 
+
+    def do_update(self, argyy):
+        """This module will update the instance using the class name and its id"""
+        div_args = argyy.split()
+        serd_objs = storage.all()
+        if (len(div_args) == 0):
+            print("** class name missing **")
+            return False
+        if div_args[0] not in HBNBCommand.__aval_clas:
+            print("** class doesn't exist **")
+            return False
+        if (len(div_args) == 1):
+            print("** instance id missing **")
+            return False
+        if "{}.{}".format(div_args[0], div_args[1]) not in serd_objs.keys():
+            print("** no instance found **")
+            return False
+        if (len(div_args) == 2):
+            print("** attribute name missing **")
+            return False
+        if (len(div_args) == 3):
+            try:
+                type(eval(div_args[2])) != dict
+            except NameError:
+                print("** value missing **")
+                return False
+        if (len(div_args) == 4):
+            cgh_ob = serd_objs["{}.{}".format(div_args[0], div_args[1])]
+            if div_args[2] in cgh_ob.__class__.__dict__.keys():
+                scnd = type(cgh_ob.__class__.__dict__[div_args[2]])
+                cgh_ob.__dict__[div_args[2]] = scnd(div_args[3])
+            else:
+                cgh_ob.__dict__[div_args[2]] = div_args[3]
+        elif type(eval(div_args[2])) == dict:
+            cgh_ob = serd_objs["{}.{}".format(div_args[0], div_args[1])]
+            for oby_k, oby_v in eval(div_args[2]).items():
+                if (oby_k in cgh_ob.__class__.__dict__.keys() and type(cgh_ob.__class__.__dict__[oby_k]) in {str, int, float}):
+                    scnd = type(cgh_ob.__class__.__dict__[oby_k])
+                    cgh_ob.__dict__[oby_k] = scnd(oby_v)
+                else:
+                    cgh_ob.__dict__[oby_k] = oby_v
+        storage.save()
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
