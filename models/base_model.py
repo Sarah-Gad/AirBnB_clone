@@ -3,7 +3,6 @@
 
 import uuid
 from datetime import datetime
-from models import storage
 
 
 class BaseModel:
@@ -12,6 +11,7 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """this method is the constuctor method to make instance"""
+        from models import storage
         if (len(kwargs) != 0):
             for k_k, k_v in kwargs.items():
                 if (k_k == "__class__"):
@@ -40,6 +40,7 @@ class BaseModel:
     def save(self):
         """I uwd this method to update the instance
         attribute updated_at with the curr time"""
+        from models import storage
         self.updated_at = datetime.now()
         storage.save()
 
