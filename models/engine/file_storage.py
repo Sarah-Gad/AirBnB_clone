@@ -1,18 +1,16 @@
 #!/usr/bin/python3
 """I used this module to make the FileStorage class
 that I will usefor serialization and deserialization"""
-# models/engine/file_storage.py
 
 import json
 from models.base_model import BaseModel
-from os.path import exists
 
 
 class FileStorage:
     """I will use this class to save instances into a json file
     and also to get instances from a json file"""
 
-    __file_path = "file.json"
+    __file_path = "the_json_file.json"
     __objects = {}
 
     def all(self):
@@ -21,7 +19,7 @@ class FileStorage:
 
     def new(self, obj):
         """This method is used to set the __object"""
-        thek = obj.__class__.__name__ + '.' + obj.id
+        thek = f"{obj.__class__.__name__}.{obj.id}"
         FileStorage.__objects[thek] = obj
 
     def save(self):

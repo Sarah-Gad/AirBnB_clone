@@ -3,6 +3,7 @@
 
 import uuid
 from datetime import datetime
+from models import storage
 
 
 class BaseModel:
@@ -10,18 +11,15 @@ class BaseModel:
     attri and methods for the other classes"""
 
     def __init__(self, *args, **kwargs):
-        """this method is the constuctor method to make instance
-        Args:
-            args: the posiotional rgs
-            kwargs: value key args
-        """
-        from models import storage
-        if kwargs:
+        """this method is the constuctor method to make instance"""
+        if (len(kwargs) != 0):
             for k_k, k_v in kwargs.items():
+                if (k_k == "__class__"):
+                    continue
                 if k_k == "created_at" or k_k == "updated_at":
                     setattr(self, k_k, datetime.strptime(
                         k_v, "%Y-%m-%dT%H:%M:%S.%f"))
-                elif k_k != '__class__':
+                else:
                     setattr(self, k_k, k_v)
             if 'id' not in kwargs:
                 self.id = str(uuid.uuid4())
@@ -36,27 +34,19 @@ class BaseModel:
 
     def __str__(self):
         """I override this method to control the
-        string representaion of the object
-
-        Returns:
-            dic_rep: the str representaion
-        """
+        string representaion of the object"""
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
 
     def save(self):
         """I uwd this method to update the instance
         attribute updated_at with the curr time"""
-        from models import storage
         self.updated_at = datetime.now()
         storage.save()
 
     def to_dict(self):
         """I used this method to return the dict that
         contains all the key_values of the __dict__
-        instance
-        Returns:
-            att_dict: the dictionary representaion
-        """
+        instance"""
         att_dict = {}
         for ins_k, ins_v in self.__dict__.items():
             if ins_k == "created_at" or ins_k == "updated_at":
