@@ -3,7 +3,6 @@
 
 import uuid
 from datetime import datetime
-from models import storage
 
 
 class BaseModel:
@@ -12,15 +11,19 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """this method is the constuctor method to make instance"""
-        if (len(kwargs) != 0):
+        from models import storage
+        if kwargs:
             for k_k, k_v in kwargs.items():
-                if (k_k == "__class__"):
-                    continue
-                if (k_k == "created_at" or k_k == "updated_at"):
+                if k_k == "created_at" or k_k == "updated_at":
                     setattr(self, k_k, datetime.strptime(
                         k_v, "%Y-%m-%dT%H:%M:%S.%f"))
-                else:
+                elif k_k != '__class__':
                     setattr(self, k_k, k_v)
+            if 'id' not in kwargs:
+                self.id = str(uuid.uuid4())
+            if 'created_at' not in kwargs:
+                self.created_at = datetime.now()
+            self.updated_at = datetime.now()
         else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
@@ -35,6 +38,7 @@ class BaseModel:
     def save(self):
         """I uwd this method to update the instance
         attribute updated_at with the curr time"""
+        from models import storage
         self.updated_at = datetime.now()
         storage.save()
 
