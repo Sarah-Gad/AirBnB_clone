@@ -10,6 +10,26 @@ from models.city import City
 from models.place import Place
 from models.amenity import Amenity
 from models.review import Review
+import re
+from shlex import split
+
+def div_it(argo):
+    """Thsi fucntion Iused to split the arg commigm form cmd"""
+    cur_q = re.search(r"\{(.*?)\}", argo)
+    sq_q = re.search(r"\[(.*?)\]", argo)
+    if cur_q is None:
+        if sq_q is None:
+            return [iter.strip(",") for iter in split(argo)]
+        else:
+            first_1 = split(argo[:sq_q.span()[0]])
+            scnd_2 = [iter.strip(",") for iter in first_1]
+            scnd_2.append(sq_q.group())
+            return scnd_2
+    else:
+        first_1 = split(argo[:cur_q.span()[0]])
+        scnd_2 = [iter.strip(",") for iter in first_1]
+        scnd_2.append(cur_q.group())
+        return scnd_2
 
 
 class HBNBCommand(cmd.Cmd):
@@ -47,6 +67,16 @@ class HBNBCommand(cmd.Cmd):
         print("*** Unknown syntax: {}".format(argyy))
         return False
 
+    def do_count(self, argyy):
+        """i used this functio to help me know the
+        num of users with the same name"""
+        tot = div_it(argyy)
+        numy = 0
+        for one_ob in storage.all().values():
+            if tot[0] == one_ob.__class__.__name__:
+                numy += 1
+        print(numy)
+
     def do_quit(self, argyy):
         """I used this method to make a command that
         exits the command line interpreter"""
@@ -64,19 +94,18 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, argyy):
         """This method is used to create a new instance"""
-        if (len(argyy) == 0):
+        div_args = div_it(argyy)
+        if len(div_args) == 0:
             print("** class name missing **")
-            return
-        try:
-            created_ins = eval(argyy + "()")
-            created_ins.save()
-            print(created_ins.id)
-        except NameError:
+        elif div_args[0] not in HBNBCommand.__aval_clas:
             print("** class doesn't exist **")
+        else:
+            print(eval(div_args[0])().id)
+            storage.save()
 
     def do_show(self, argyy):
         """This method will print the string representaion of the inst"""
-        div_arg = argyy.split()
+        div_arg = div_it(argyy)
         serd_objs = storage.all()
         if (len(div_arg) == 0):
             print("** class name missing **")
@@ -91,7 +120,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_destroy(self, argyy):
         """This method will be used to delete an instance"""
-        div_arg = argyy.split()
+        div_arg = div_it(argyy)
         serd_objs = storage.all()
         if (len(div_arg) == 0):
             print("** class name missing **")
@@ -106,7 +135,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, argyy):
         """This method will give you the str representation of all instances"""
-        div_args = argyy.split()
+        div_args = div_it(argyy)
         if len(div_args) > 0 and div_args[0] not in HBNBCommand.__aval_clas:
             print("** class doesn't exist **")
         else:
@@ -122,7 +151,7 @@ class HBNBCommand(cmd.Cmd):
     def do_update(self, argyy):
         """This module will update the instance
         using the class name and its id"""
-        div_args = argyy.split()
+        div_args = div_it(argyy)
         serd_objs = storage.all()
         if (len(div_args) == 0):
             print("** class name missing **")
