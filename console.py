@@ -38,7 +38,7 @@ class HBNBCommand(cmd.Cmd):
             created_ins = eval(argyy + "()")
             created_ins.save()
             print(created_ins.id)
-        except:
+        except NameError:
             print("** class doesn't exist **")
 
     def do_show(self, argyy):
@@ -51,10 +51,10 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
         elif (len(div_arg) == 1):
             print("** instance id missing **")
-        elif ("{}.{}".format(div_arg[0],div_arg[1]) not in serd_objs):
+        elif ("{}.{}".format(div_arg[0], div_arg[1]) not in serd_objs):
             print("** no instance found **")
         else:
-            print(serd_objs["{}.{}".format(div_arg[0],div_arg[1])])
+            print(serd_objs["{}.{}".format(div_arg[0], div_arg[1])])
 
     def do_destroy(self, argyy):
         """This method will be used to delete an instance"""
@@ -66,10 +66,10 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
         elif (len(div_arg) == 1):
             print("** instance id missing **")
-        elif ("{}.{}".format(div_arg[0],div_arg[1]) not in serd_objs):
+        elif ("{}.{}".format(div_arg[0], div_arg[1]) not in serd_objs):
             print("** no instance found **")
         else:
-            del serd_objs["{}.{}".format(div_arg[0],div_arg[1])]
+            del serd_objs["{}.{}".format(div_arg[0], div_arg[1])]
 
     def do_all(self, argyy):
         """This method will give you the str representation of all instances"""
@@ -79,15 +79,16 @@ class HBNBCommand(cmd.Cmd):
         else:
             returned_st = []
             for f_inst in storage.all().values():
-                if len(div_args) > 0 and div_args[0] == f_inst.__class__.__name__:
+                if len(div_args) > 0 and\
+                        div_args[0] == f_inst.__class__.__name__:
                     returned_st.append(f_inst.__str__())
                 elif len(div_args) == 0:
                     returned_st.append(f_inst.__str__())
             print(returned_st)
- 
 
     def do_update(self, argyy):
-        """This module will update the instance using the class name and its id"""
+        """This module will update the instance
+        using the class name and its id"""
         div_args = argyy.split()
         serd_objs = storage.all()
         if (len(div_args) == 0):
@@ -121,7 +122,9 @@ class HBNBCommand(cmd.Cmd):
         elif type(eval(div_args[2])) == dict:
             cgh_ob = serd_objs["{}.{}".format(div_args[0], div_args[1])]
             for oby_k, oby_v in eval(div_args[2]).items():
-                if (oby_k in cgh_ob.__class__.__dict__.keys() and type(cgh_ob.__class__.__dict__[oby_k]) in {str, int, float}):
+                if (oby_k in cgh_ob.__class__.__dict__.keys() and
+                        type(cgh_ob.__class__.__dict__[oby_k]) in
+                        {str, int, float}):
                     scnd = type(cgh_ob.__class__.__dict__[oby_k])
                     cgh_ob.__dict__[oby_k] = scnd(oby_v)
                 else:
@@ -131,4 +134,3 @@ class HBNBCommand(cmd.Cmd):
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
-
