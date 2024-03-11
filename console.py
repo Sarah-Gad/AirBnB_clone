@@ -4,6 +4,12 @@
 import cmd
 from models.base_model import BaseModel
 from models import storage
+from models.user import User
+from models.state import State
+from models.city import City
+from models.place import Place
+from models.amenity import Amenity
+from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
@@ -11,8 +17,35 @@ class HBNBCommand(cmd.Cmd):
     that will make the cmdloop"""
     prompt = "(hbnb)"
     __aval_clas = {
-            "BaseModel"
+            "BaseModel",
+            "User",
+            "Place",
+            "City",
+            "Amenity",
+            "State",
+            "Review"
     }
+
+    def default(self, argyy):
+        """I override the default method to perform speciic action"""
+        a_dict_args = {
+                "all": self.do_all,
+                "count": self.do_count,
+                "show": self.do_show,
+                "destroy": self.do_destroy,
+                "update": self.do_update
+        }
+        found = re.search(r"\.", argyy)
+        if found is not None:
+            frst_1 = [argyy[:found.span()[0]], argyy[found.span()[1]:]]
+            found = re.search(r"\((.*?)\)", frst_1[1])
+            if found is not None:
+                scnd_2 = [frst_1[1][:found.span()[0]], found.group()[1:-1]]
+                if scnd_2[0] in a_dict_args.keys():
+                    thrd_3 = "{} {}".format(frst_1[0], scnd_2[1])
+                    return a_dict_args[scnd_2[0]](thrd_3)
+        print("*** Unknown syntax: {}".format(argyy))
+        return False
 
     def do_quit(self, argyy):
         """I used this method to make a command that

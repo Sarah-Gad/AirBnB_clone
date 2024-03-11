@@ -4,6 +4,13 @@ that I will usefor serialization and deserialization"""
 
 import json
 from models.base_model import BaseModel
+from os.path import exists
+from models.city import City
+from models.place import Place
+from models.amenity import Amenity
+from models.review import Review
+from models.state import State
+from models.user import User
 
 
 class FileStorage:
@@ -12,6 +19,15 @@ class FileStorage:
 
     __file_path = "the_json_file.json"
     __objects = {}
+    all_of_classes = {
+            "BaseModel": BaseModel,
+            "User": User,
+            "Place": Place,
+            "Amenity": Amenity,
+            "City": City,
+            "Review": Review,
+            "State": State
+            }
 
     def all(self):
         """This method will return the dictionary"""
