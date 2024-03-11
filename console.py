@@ -13,6 +13,7 @@ from models.review import Review
 import re
 from shlex import split
 
+
 def div_it(argo):
     """Thsi fucntion Iused to split the arg commigm form cmd"""
     cur_q = re.search(r"\{(.*?)\}", argo)
